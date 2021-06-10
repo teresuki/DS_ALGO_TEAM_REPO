@@ -269,7 +269,7 @@ public:
     {
         printBT("", root, false);
     }
-
+    
     void deleteNode(int value, Node *find)
     {
         if (value != find->value)
@@ -290,31 +290,24 @@ public:
                 std::cout << "Delete mode with 2 chilren" << '\n';
                 Node *min = getNodeMin(find->right);
                 double minRight = min->value;
-
                 std::cout << "Min of the right subtree: " << minRight << '\n';
                 Node *parent = findParent(minRight);
-                if (parent->left)
+                if (min->right)
                 {
-                    if (parent->left->value == minRight)
-                    {
-                        parent->left = min->left;
-                        std::cout << "Free parent" << '\n';
-                    }
-                }
-                else
-                {
-                    parent->right = min->right;
+                    parent->left = min->right;
                     std::cout << "Free parent" << '\n';
                 }
+                delete (min);
                 find->value = minRight;
             }
             else if (find->hasOneChild())
             {
+                Node *child = find->getOnlyChild();
                 std::cout << "Delete node with 1 child" << '\n';
-                find->value = find->getOnlyChild()->value;
-                find->left = find->getOnlyChild()->left;
-                find->right = find->getOnlyChild()->right;
-                // delete (find->getOnlyChild());
+                find->value = child->value;
+                find->left = child->left;
+                find->right = child->right;
+                delete (child);
             }
             else
             {
@@ -337,46 +330,10 @@ public:
             }
         }
     }
-    void deletenode(int value)
-    {
-        Node *node = findNode(value);
-        if (node->hasTwoChildren())
-        {
-            std::cout << "Delete node with 2 chilren" << '\n';
-            double minRight = getNodeMin(node->right)->value;
-            Node *min = findNode(minRight);
-            min->setValue(value);
-            deletenode(value);
-            node->setValue(minRight);
-        }
-        else if (node->hasOneChild())
-        {
-            std::cout << "Node has one child" << '\n';
-            node->setValue(node->getOnlyChild()->value);
-            std::cout << node->value << '\n';
-            node->getOnlyChild()->setValue(value);
-            std::cout << node->getOnlyChild()->value << '\n';
-            deletenode(value);
-        }
-        else
-        {
-            std::cout << "Node is leaf" << '\n';
-            if (findParent(node->value)->left->value == node->value)
-            {
-                findParent(node->value)->left = nullptr;
-                std::cout << "Free parent" << '\n';
-            }
-            else
-            {
-                findParent(node->value)->right = nullptr;
-            }
-        }
-    }
 };
 
 int main()
 {
-
     int array[12] = {13, 6, 15, 17, 20, 9, 4, 3, 7, 2, 18, 8};
     BinarySearchTree bst1(array[0]);
     Node *root = bst1.getNodeRoot();
