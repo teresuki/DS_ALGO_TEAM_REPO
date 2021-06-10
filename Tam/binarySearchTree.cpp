@@ -297,6 +297,10 @@ public:
                     parent->left = min->right;
                     std::cout << "Free parent" << '\n';
                 }
+                else 
+                {
+                    parent->left = nullptr;
+                }
                 delete (min);
                 find->value = minRight;
             }
