@@ -105,7 +105,6 @@ int hashString(string k)
         int j = k.size() - i - 1;
         result += (int)k[i] * pow(128, j);
     }
-    std::cout << result << '\n';
     result = result % 101;
     int hashValue = result;
     return hashValue;
@@ -121,48 +120,149 @@ string getRandomString(int length)
     return a;
 }
 
-// chaining by using linked list
-void insertString(List **T, string k)
+// collision avoid by using linked list only(chaining)
+void insertKey(List **T, string k)
 {
     int index = hashString(k);
-    // if T[index] is NULL add a List head
-    if (T[index] == NULL)
+
+    // if T[index] has a list, push string k to the existed list
+    if (T[index])
+    {
+        T[index]->pushNode(k);
+    }
+
+    // T[index] is NULL, add a List head
+    else
     {
         Node *head = new Node(k);
         List *list = new List(head);
         T[index] = list;
     }
-    // T[index] has a list push string k to the existed list
+}
+// delete key for hash table with only linked list
+void deleteKey(List **T, string k)
+{
+    int index = hashString(k);
+    if (T[index])
+    {
+        T[index]->deleteNode(k);
+    }
     else
+    {
+        cout << "Invalid key" << '\n';
+    }
+}
+
+// find key for hash table with only linked list
+Node *findKey(List **T, string k)
+{
+    int index = hashString(k);
+    if (T[index])
+    {
+        return T[index]->findNode(k);
+    }
+    else
+    {
+        cout << "Invalid key" << '\n';
+    }
+}
+
+// collision avoid by using linear probing and linked list
+void insertKeyProbing(List **T, string k)
+{
+    int probe = 0;
+    int index = hashString(k);
+    for (probe; probe < 101; probe++)
+    {
+        int newIndex = (index + probe) % 101;
+        // T[index] has a list, increase probe
+        if (T[newIndex])
+        {
+            ;
+        }
+        // T[index] is NULL, add a List head
+        else
+        {
+            Node *head = new Node(k);
+            List *list = new List(head);
+
+            T[newIndex] = list;
+            break;
+            return;
+        }
+    }
+    // if there are no open address, push it to the orginal list
+    if (probe == 101)
     {
         T[index]->pushNode(k);
     }
 }
+// find and delete function for hash tabel with probe need to be added
+
 int main()
 {
     srand(time(NULL));
     string a = "CLRS";
-    std::cout << convertStringToInt(a);
-    List *T[101];
-    for (int i = 0; i < 101; i++)
+    List *TLinkedList[101];
+    List *TProbe[101];
+    int hashTableLength = 101;
+    int numberOfKey = 101;
+
+    // initialize hash table
+    for (int i = 0; i < hashTableLength; i++)
     {
-        T[i] = NULL;
+        TLinkedList[i] = NULL;
+        TProbe[i] = NULL;
     }
-    for (int i = 0; i < 200; i++)
+
+    // insert keys to hash table
+    for (int i = 0; i < numberOfKey; i++)
     {
         a = getRandomString(4);
-        insertString(T, a);
+        insertKey(TLinkedList, a);
+        insertKeyProbing(TProbe, a);
     }
-    for (int i = 0; i < 101; i++)
+
+    // print hash table
+    cout << "Hash Table with only linked list" << '\n';
+    for (int i = 0; i < hashTableLength; i++)
     {
         cout << i << ' ';
-        if (T[i])
+        if (TLinkedList[i])
         {
-            T[i]->printNode();
+            TLinkedList[i]->printNode();
         }
         else
         {
             cout << '\n';
         }
+    }
+    cout << "Hash Table with probe and liked list" << '\n';
+    for (int i = 0; i < hashTableLength; i++)
+    {
+        cout << i << ' ';
+        if (TProbe[i])
+        {
+            TProbe[i]->printNode();
+        }
+        else
+        {
+            cout << '\n';
+        }
+    }
+
+    // test find and delete function for both hash table
+    // now the function for probing is not functioning
+    cout << "Find key value: " << findKey(TLinkedList, a)->value << '\n';
+    cout << "Find key value: " << findKey(TProbe, a)->value << '\n';
+    deleteKey(TLinkedList, a);
+    deleteKey(TProbe, a);
+    if (findKey(TLinkedList, a))
+    {
+        cout << "Find key value after delete: " << findKey(TLinkedList, a)->value << '\n';
+    }
+    if (findKey(TProbe, a))
+    {
+        cout << "Find key value after delete: " << findKey(TProbe, a)->value << '\n';
     }
 }
