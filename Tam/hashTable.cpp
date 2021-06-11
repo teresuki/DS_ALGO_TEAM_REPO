@@ -145,6 +145,7 @@ void deleteKey(List **T, string k)
     int index = hashString(k);
     if (T[index])
     {
+        cout << "Index: " << index << ' ';
         T[index]->deleteNode(k);
     }
     else
@@ -159,6 +160,7 @@ Node *findKey(List **T, string k)
     int index = hashString(k);
     if (T[index])
     {
+        cout << "Index: " << index << ' ';
         return T[index]->findNode(k);
     }
     else
@@ -168,9 +170,8 @@ Node *findKey(List **T, string k)
 }
 
 // collision avoid by using linear probing and linked list
-void insertKeyProbing(List **T, string k)
+void insertKeyProbing(List **T, string k, int &probe)
 {
-    int probe = 0;
     int index = hashString(k);
     for (probe; probe < 101; probe++)
     {
@@ -185,7 +186,6 @@ void insertKeyProbing(List **T, string k)
         {
             Node *head = new Node(k);
             List *list = new List(head);
-
             T[newIndex] = list;
             break;
             return;
@@ -198,15 +198,46 @@ void insertKeyProbing(List **T, string k)
     }
 }
 // find and delete function for hash tabel with probe need to be added
+void deleteKey(List **T, string k, int &probe)
+{
+    int index = hashString(k);
+    index = (index + probe) % 101;
+    if (T[index])
+    {
+        cout << "Index: " << index << ' ';
+        T[index]->deleteNode(k);
+    }
+    else
+    {
+        cout << "Invalid key" << '\n';
+    }
+}
+
+// find key for hash table with only linked list
+Node *findKey(List **T, string k, int &probe)
+{
+    int index = hashString(k);
+    index = (index + probe) % 101;
+    if (T[index])
+    {
+        cout << "Index: " << index << ' ';
+        return T[index]->findNode(k);
+    }
+    else
+    {
+        cout << "Invalid key" << '\n';
+    }
+}
 
 int main()
 {
     srand(time(NULL));
-    string a = "CLRS";
+    string a[200];
     List *TLinkedList[101];
     List *TProbe[101];
+    int probeList[200];
     int hashTableLength = 101;
-    int numberOfKey = 101;
+    int numberOfKey = 200;
 
     // initialize hash table
     for (int i = 0; i < hashTableLength; i++)
@@ -218,9 +249,10 @@ int main()
     // insert keys to hash table
     for (int i = 0; i < numberOfKey; i++)
     {
-        a = getRandomString(4);
-        insertKey(TLinkedList, a);
-        insertKeyProbing(TProbe, a);
+        probeList[i] = 0;
+        a[i] = getRandomString(4);
+        insertKey(TLinkedList, a[i]);
+        insertKeyProbing(TProbe, a[i], probeList[i]);
     }
 
     // print hash table
@@ -252,17 +284,16 @@ int main()
     }
 
     // test find and delete function for both hash table
-    // now the function for probing is not functioning
-    cout << "Find key value: " << findKey(TLinkedList, a)->value << '\n';
-    cout << "Find key value: " << findKey(TProbe, a)->value << '\n';
-    deleteKey(TLinkedList, a);
-    deleteKey(TProbe, a);
-    if (findKey(TLinkedList, a))
+    cout << "Find key: " << findKey(TLinkedList, a[50])->value << '\n';
+    cout << "Find key: " << findKey(TProbe, a[50], probeList[50])->value << '\n';
+    deleteKey(TLinkedList, a[50]);
+    deleteKey(TProbe, a[50], probeList[50]);
+    if (findKey(TLinkedList, a[50]))
     {
-        cout << "Find key value after delete: " << findKey(TLinkedList, a)->value << '\n';
+        cout << "Find key value after delete: " << findKey(TLinkedList, a[50])->value << '\n';
     }
-    if (findKey(TProbe, a))
+    if (findKey(TProbe, a[50]))
     {
-        cout << "Find key value after delete: " << findKey(TProbe, a)->value << '\n';
+        cout << "Find key value after delete: " << findKey(TProbe, a[50], probeList[50])->value << '\n';
     }
 }
