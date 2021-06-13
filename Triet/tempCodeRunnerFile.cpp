@@ -1,4 +1,7 @@
-for(int i=0; i < hash_table.size(); i ++)
-	{
-		display_dlink(hash_table[i]);
-	}
+
+// void add_hash_linear(Unit input,float hash_linear[SIZE])
+// {
+// 	int index = hash_function(input.key);
+
+// 	if
+// }

@@ -1,9 +1,11 @@
 #include <iostream>
-#include <array>
+#include <cmath>
+// #include <array>
 #include "dlink_list.hpp"
 #include <string.h>
 
 #define SIZE 3
+#define SIZE_linear 4
 
 
 using namespace std;
@@ -41,10 +43,46 @@ void add_hash_table(Unit input, Node *hash_table[SIZE])
 	insert_after(&hash_table[index], input.value);
 }
 
+
+//Search for the node with the specific key and value
+Node *search_linked_list(Unit wanted,Node *hash_table[SIZE])
+{
+	int wanted_index = hash_function(wanted.key);
+
+	return search_node(&hash_table[wanted_index],wanted.value);
+}
+
+//----------------------------------------------------------------------------------------------------
+
+// void add_hash_linear(Unit input,float hash_linear[])
+// {
+
+// 	// int times 
+// 	int index = hash_function(input.key);
+
+// 	if(hash_linear[index] == NAN) hash_linear[index] = input.value;
+// 	else
+// 	{
+// 		while(hash_linear[index] != NAN)
+// 		{
+// 			index++;
+// 			if( hash_linear[index] == NAN)
+// 			{
+// 				hash_linear[index] = input.value;
+// 				return;
+// 			}
+// 		}
+// 	}
+}
+
+
+
+
 void print_hash_table(Node *hash_table[SIZE])
 {
 	for(int i=0; i < SIZE; i ++)
 	{
+		cout<< i <<":  ";
 		display_dlink(hash_table[i]);
 	}
 	// display_dlink(hash_table[1]);
@@ -75,6 +113,30 @@ int main()
 
 	print_hash_table(hash_table);
 
+	// finding the location of the node containing U3 and printing U3's value (which is 3)
+	Node *pU3 = search_linked_list(U3,hash_table);
+	cout <<"Printing the value of U3: " <<pU3->value <<'\n';
 
+//----------------------------------------------------------------------------------------------------
+// hash table using linear probing
+	cout<<"----------------------------------------------------------------------------------------------------"<<'\n';
+
+	// float hash_linear[SIZE_linear];
+	// for(int i =0; i < SIZE_linear; i++)
+	// {
+	// 	hash_linear[i] = NAN;
+	// }
+
+	// add_hash_linear(U1,hash_linear);
+	// add_hash_linear(U2,hash_linear);
+	// add_hash_linear(U3,hash_linear);
+	// add_hash_linear(U4,hash_linear);
+
+	// for(int i=0; i < SIZE_linear;i++)
+	// {
+	// 	cout<< hash_linear[i] <<'\t';
+	// }
+
+	putchar('\n');
 	return 0;
 }

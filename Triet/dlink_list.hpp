@@ -125,7 +125,7 @@ void display_dlink(Node *current)
 {
 	while(current != nullptr)
 	{
-		cout << current->value <<'\t';
+		cout << current->value <<"---";
 		current = current->next; // here we are changing the address of current's memory to the address value stored in (*current).next 
 	}
 	if( current == nullptr) cout <<"null";
