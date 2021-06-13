@@ -28,6 +28,7 @@ void insert_after(Node **head, float new_value)
 	//if there is already a node added to the chain
 	if( *head != nullptr)
 	{
+			// cout <<"going IN" <<'\n';
 		// we need to find the node that is the last node in the chain 
 		Node *last = *head;
 		while ( last->next != nullptr) // if the next node of the chain exist move to it

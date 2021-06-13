@@ -27,12 +27,12 @@ int hash_function(string key)
 		key_ASCII += static_cast<int>(key[i]);
 	}
 	key_ASCII = key_ASCII % SIZE;
-	cout << key_ASCII <<'\n';
+	// cout << key_ASCII <<'\n';
 	return key_ASCII;
 }
 
 // add hash using linked list to avoid collision
-void add_hash_table(Unit input, array<Node *,SIZE> hash_table)
+void add_hash_table(Unit input, Node *hash_table[SIZE])
 {
 	// get the index
 	int index = hash_function(input.key);
@@ -41,22 +41,23 @@ void add_hash_table(Unit input, array<Node *,SIZE> hash_table)
 	insert_after(&hash_table[index], input.value);
 }
 
-void print_hash_table(array<Node *,SIZE> hash_table)
+void print_hash_table(Node *hash_table[SIZE])
 {
-	// for(int i=0; i < hash_table.size(); i ++)
-	// {
-	// 	display_dlink(hash_table[i]);
-	// }
-	display_dlink(hash_table[1]);
+	for(int i=0; i < SIZE; i ++)
+	{
+		display_dlink(hash_table[i]);
+	}
+	// display_dlink(hash_table[1]);
 }
 	
 int main()
 {
 	// create an array full of pointers to Node which will be out hash table
-	array<Node *,SIZE> hash_table;
+	// array<Node *,SIZE> hash_table;
+	Node *hash_table[SIZE];
 
 	// fill each elements in our hash table with nullptr
-	for(int i =0; i < hash_table.size(); i++)
+	for(int i =0; i < SIZE; i++)
 	{
 		Node *head = nullptr;
 		hash_table[i] = head;
@@ -72,8 +73,8 @@ int main()
 	add_hash_table(U3,hash_table);
 	add_hash_table(U4,hash_table);
 
-	// print_hash_table(hash_table);
+	print_hash_table(hash_table);
 
-	search_node(&hash_table[1],4);
+
 	return 0;
 }
