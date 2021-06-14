@@ -1,6 +1,5 @@
 #include <iostream>
 #include <cmath>
-// #include <array>
 #include "dlink_list.hpp"
 #include <string.h>
 
@@ -156,7 +155,7 @@ void delete_hash_linear(Unit wanted, Node *hash_linear[SIZE_linear])
 		{
 			wanted_index++;
 			times_probed++;
-			
+
 			if (wanted_index >= SIZE_linear) wanted_index = wanted_index % SIZE_linear;
 
 			if(hash_linear[wanted_index] != nullptr && search_node(&hash_linear[wanted_index],wanted.value) != nullptr)
