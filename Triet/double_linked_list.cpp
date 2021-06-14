@@ -7,7 +7,7 @@ struct Node
 	float value;
 	Node *next ;
 	Node *previous ;
-	Node(int value): value(value) {}
+	Node(float value): value(value) {}
 };
 
 // Node **head needs to be a double pointer because it is pointing to Node *head on stack which is already a pointer
