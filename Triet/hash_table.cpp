@@ -52,35 +52,62 @@ Node *search_linked_list(Unit wanted,Node *hash_table[SIZE])
 	return search_node(&hash_table[wanted_index],wanted.value);
 }
 
+void delete_linked_list(Unit wanted,Node *hash_table[SIZE])
+{
+	int wanted_index = hash_function(wanted.key);
+
+	delete_node(&hash_table[wanted_index], wanted.value);
+}
+
+void print_hash_table(Node *hash_table[])
+{
+	for(int i=0; i < SIZE; i ++)
+	{
+		cout<< i <<":  ";
+		display_dlink(hash_table[i]);
+	}
+	// display_dlink(hash_table[1]);
+}
+
 //----------------------------------------------------------------------------------------------------
+void add_hash_linear(Unit input, Node *hash_linear[SIZE_linear])
+{
+	int index = hash_function(input.key);
+	static int times_probed =0;
+	if(hash_linear[index] == nullptr)
+	{
+		insert_after(&hash_linear[index],input.value);
+	}
+	else 
+	{
+		while(hash_linear[index] != nullptr)
+		{
+			index++;
+			times_probed++;
+			if (index >= SIZE_linear) index = index % SIZE_linear;
 
-// void add_hash_linear(Unit input,float hash_linear[])
-// {
+			if(hash_linear[index] == nullptr) 
+			{
+				insert_after(&hash_linear[index],input.value);
+				return;
+			}
 
-// 	// int times 
-// 	int index = hash_function(input.key);
-
-// 	if(hash_linear[index] == NAN) hash_linear[index] = input.value;
-// 	else
-// 	{
-// 		while(hash_linear[index] != NAN)
-// 		{
-// 			index++;
-// 			if( hash_linear[index] == NAN)
-// 			{
-// 				hash_linear[index] = input.value;
-// 				return;
-// 			}
-// 		}
-// 	}
+			if(times_probed >= SIZE_linear)
+			{
+				cout <<"Not enough memory space for this value, can't add"<<'\n';
+				return;
+		}
+		}
+	}
 }
 
 
 
 
-void print_hash_table(Node *hash_table[SIZE])
+
+void print_hash_linear(Node *hash_table[])
 {
-	for(int i=0; i < SIZE; i ++)
+	for(int i=0; i < SIZE_linear; i ++)
 	{
 		cout<< i <<":  ";
 		display_dlink(hash_table[i]);
@@ -113,6 +140,12 @@ int main()
 
 	print_hash_table(hash_table);
 
+	cout<<"----------------------------------------------------------------------------------------------------"<<'\n';
+
+	delete_linked_list(U1,hash_table);
+	
+	print_hash_table(hash_table);
+
 	// finding the location of the node containing U3 and printing U3's value (which is 3)
 	Node *pU3 = search_linked_list(U3,hash_table);
 	cout <<"Printing the value of U3: " <<pU3->value <<'\n';
@@ -121,22 +154,22 @@ int main()
 // hash table using linear probing
 	cout<<"----------------------------------------------------------------------------------------------------"<<'\n';
 
-	// float hash_linear[SIZE_linear];
-	// for(int i =0; i < SIZE_linear; i++)
-	// {
-	// 	hash_linear[i] = NAN;
-	// }
+	Node *Hash_linear[SIZE_linear];
 
-	// add_hash_linear(U1,hash_linear);
-	// add_hash_linear(U2,hash_linear);
-	// add_hash_linear(U3,hash_linear);
-	// add_hash_linear(U4,hash_linear);
+	for(int i =0; i < SIZE_linear; i++)
+	{
+		Node *head = nullptr;
+		Hash_linear[i] = head;
+	}
+	Unit U5("efcg",5);
 
-	// for(int i=0; i < SIZE_linear;i++)
-	// {
-	// 	cout<< hash_linear[i] <<'\t';
-	// }
+	 add_hash_linear(U1,Hash_linear);
+	 add_hash_linear(U2,Hash_linear);
+	 add_hash_linear(U3,Hash_linear);
+	 add_hash_linear(U4,Hash_linear);
+	 add_hash_linear(U5,Hash_linear);
 
+	print_hash_linear(Hash_linear);
 	putchar('\n');
 	return 0;
 }
