@@ -1,7 +1,2 @@
-
-// void add_hash_linear(Unit input,float hash_linear[SIZE])
-// {
-// 	int index = hash_function(input.key);
-
-// 	if
-// }
+	// Node *find = search_hash_linear(U4,Hash_linear);
+	// if (find != nullptr)  std::cout << find->value <<'\n';

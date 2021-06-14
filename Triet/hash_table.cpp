@@ -94,22 +94,93 @@ void add_hash_linear(Unit input, Node *hash_linear[SIZE_linear])
 
 			if(times_probed >= SIZE_linear)
 			{
-				cout <<"Not enough memory space for this value, can't add"<<'\n';
+				std::cout <<"Not enough memory space for this value, can't add"<<'\n';
 				return;
-		}
+			}
 		}
 	}
 }
 
+Node *search_hash_linear(Unit wanted,Node *hash_linear[SIZE_linear])
+{
+	int wanted_index = hash_function(wanted.key);
+	int times_probed =0;
+
+	Node *result;
+
+	if(hash_linear[wanted_index] != nullptr && search_node(&hash_linear[wanted_index],wanted.value) != nullptr)
+	{
+		result = hash_linear[wanted_index];
+	}
+	else
+	{
+		while (hash_linear[wanted_index] == nullptr || search_node(&hash_linear[wanted_index],wanted.value) == nullptr)
+		{
+			wanted_index++;
+			times_probed++;
+
+			if (wanted_index >= SIZE_linear) wanted_index = wanted_index % SIZE_linear;
 
 
+			if(hash_linear[wanted_index] != nullptr && search_node(&hash_linear[wanted_index],wanted.value) != nullptr)
+			{
+				result = hash_linear[wanted_index];
+				break;
+			}
+
+			if(times_probed >= SIZE_linear)
+			{
+				std::cout<<"NO such nodes exist from search" <<'\n';
+				result = nullptr;
+				break;
+			}
+		} 
+	}
+
+	return result;
+}
+
+void delete_hash_linear(Unit wanted, Node *hash_linear[SIZE_linear])
+{
+	int wanted_index = hash_function(wanted.key);
+
+	int times_probed =0;
+
+	if(hash_linear[wanted_index] != nullptr && search_node(&hash_linear[wanted_index],wanted.value) != nullptr)
+	{
+		delete_node(&hash_linear[wanted_index],wanted.value);
+	}
+	else
+	{
+		while(hash_linear[wanted_index] == nullptr ||  search_node(&hash_linear[wanted_index],wanted.value) == nullptr)
+		{
+			wanted_index++;
+			times_probed++;
+			
+			if (wanted_index >= SIZE_linear) wanted_index = wanted_index % SIZE_linear;
+
+			if(hash_linear[wanted_index] != nullptr && search_node(&hash_linear[wanted_index],wanted.value) != nullptr)
+			{
+				delete_node(&hash_linear[wanted_index],wanted.value);
+				break;
+			}
+			if(times_probed >= SIZE_linear)
+			{
+				std::cout<<"NO such nodes exist from delete" <<'\n';
+				break;
+			}
+
+
+		}
+	}
+}
 
 
 void print_hash_linear(Node *hash_table[])
 {
 	for(int i=0; i < SIZE_linear; i ++)
 	{
-		cout<< i <<":  ";
+		std::cout<< i <<":  ";
 		display_dlink(hash_table[i]);
 	}
 	// display_dlink(hash_table[1]);
@@ -140,7 +211,7 @@ int main()
 
 	print_hash_table(hash_table);
 
-	cout<<"----------------------------------------------------------------------------------------------------"<<'\n';
+	std::cout<<"----------------------------------------------------------------------------------------------------"<<'\n';
 
 	delete_linked_list(U1,hash_table);
 	
@@ -148,11 +219,11 @@ int main()
 
 	// finding the location of the node containing U3 and printing U3's value (which is 3)
 	Node *pU3 = search_linked_list(U3,hash_table);
-	cout <<"Printing the value of U3: " <<pU3->value <<'\n';
+	std::cout <<"Printing the value of U3: " <<pU3->value <<'\n';
 
 //----------------------------------------------------------------------------------------------------
 // hash table using linear probing
-	cout<<"----------------------------------------------------------------------------------------------------"<<'\n';
+	std::cout<<"----------------------------------------------------------------------------------------------------"<<'\n';
 
 	Node *Hash_linear[SIZE_linear];
 
@@ -170,6 +241,16 @@ int main()
 	 add_hash_linear(U5,Hash_linear);
 
 	print_hash_linear(Hash_linear);
-	putchar('\n');
+
+	std::cout<<"----------------------------------------------------------------------------------------------------"<<'\n';
+
+	delete_hash_linear(U4,Hash_linear);
+
+	print_hash_linear(Hash_linear);
+
+	Node *find = search_hash_linear(U4,Hash_linear);
+	if (find != nullptr)  std::cout << find->value <<'\n';
+
+	std::putchar('\n');
 	return 0;
 }
