@@ -47,9 +47,45 @@ void RB_insert_fixup(Node **z, Node **root, Node **parent_current_node)
 	{
 		if( (*z)->parent == (*z)->parent->parent->left)
 		{
-
+			(*parent_current_node) = (*z)->parent->parent->right;
+			if( (*parent_current_node)->isRed == true)
+			{
+				(*z)->parent->isRed = false;
+				(*parent_current_node)->isRed = false;
+				(*z)->parent->parent->isRed = true;
+				(*z) = (*z)->parent->parent;
+			}
+			else if ( (*z) == (*z)->parent->right )
+			{
+				(*z) = (*z)->parent;
+				rotate_left(&(*root) , &(*z) );
+			}
+			(*z)->parent->isRed == false;
+			(*z)->parent->parent->isRed = true;
+			rotate_right(&(*root),&( ((*z)->parent->parent) ) );
+		}
+		else
+		{
+			//double check this WIP
+			(*parent_current_node) = (*z)->parent->parent->left;
+			if((*parent_current_node)->isRed == true)
+			{
+				(*z)->parent->isRed = false;
+				(*parent_current_node)->isRed = false;
+				(*z)->parent->parent->isRed = true;
+				(*z) = (*z)->parent->parent;
+			}
+			else if( (*z) == (*z)->parent->left )
+			{
+				(*z) = (*z)->parent;
+				rotate_right(&(*root), &(*z));
+			}
+			(*z)->parent->isRed = false;
+			(*z)->parent->parent->isRed = true;
+			rotate_left(&(*root),&( ((*z)->parent->parent) ) );
 		}
 	}
+	(*root)->isRed = false;
 }
 
 struct RBtree
@@ -69,23 +105,22 @@ struct RBtree
 		//default the new node added naively will be red
 		new_node->isRed= true;
 
-		Node *current_node;
-		current_node = root;
+		Node *current_node = root;
 
-		Node *parent_current_node;
+		Node *parent_current_node = nullptr;
 
 		while(current_node != nullptr)
 		{
 			//if smaller or equal goes left
+			parent_current_node = current_node;
+
 			if(current_node != nullptr && new_node->value <= current_node->value)
 			{
-				parent_current_node = current_node;
 				current_node = current_node->left;
 			}
 			
 			if(current_node != nullptr && new_node->value > current_node->value)
 			{
-				parent_current_node = current_node;
 				current_node = current_node->right;
 			}
 		}
@@ -102,8 +137,7 @@ struct RBtree
 			parent_current_node->right = new_node;
 		}
 
-
-		
+	RB_insert_fixup( &(this->root), &new_node, &parent_current_node);
 	}
 
 };
