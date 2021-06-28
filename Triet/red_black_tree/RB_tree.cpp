@@ -12,6 +12,46 @@ struct Node
 	Node(float value): value(value) {}
 };
 
+void rotate_left(Node **root, Node **x)
+{
+	Node *y = (*x)->right;
+	(*x)->right = y->left;
+	if (y->left != nullptr) y->left->parent = *x;
+	y->parent = (*x)->parent;
+	if( (*x)->parent == nullptr) *root = y;
+	else if(*x == (*x)->parent->left ) (*x)->parent->left = y;
+	else (*x)->parent->right = y;
+
+	y->left = *x;
+	(*x)->parent = y;
+}
+
+void rotate_right(Node **root, Node **x)
+{
+	Node *y = (*x)->left;
+	(*x)->left = y->right;
+	if(y->right !=  nullptr) y->right->parent = *x;
+	y->parent = (*x)->parent;
+
+	if( (*x)->parent == nullptr ) *root = y;
+	else if( *x == (*x)->parent->right ) (*x)->parent->right =y;
+	else (*x)->parent->left = y;
+
+	y->right = *x;
+	(*x)->parent = y;
+}
+
+void RB_insert_fixup(Node **z, Node **root, Node **parent_current_node)
+{
+	while( (*z)->parent->isRed == true )
+	{
+		if( (*z)->parent == (*z)->parent->parent->left)
+		{
+
+		}
+	}
+}
+
 struct RBtree
 {
 	Node *root = new Node;
