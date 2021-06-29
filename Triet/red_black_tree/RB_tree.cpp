@@ -70,9 +70,12 @@ void RB_insert_fixup(Node **z, Node **root, Node **parent_current_node)
 				(*z) = (*z)->parent;  //case 2
 				rotate_left(&(*root) , &(*z) ); //case 2
 			}
+			if((*z)->parent != nullptr && (*z)->parent->parent != nullptr )
+			{
 			(*z)->parent->isRed == false; //case 3
 			(*z)->parent->parent->isRed = true; //case 3
 			rotate_right(&(*root),&( ((*z)->parent->parent) ) ); //case 3
+			}
 		}
 		else if ( (*z)->parent->parent != nullptr && (*z)->parent == (*z)->parent->parent->right )
 		{
@@ -89,11 +92,14 @@ void RB_insert_fixup(Node **z, Node **root, Node **parent_current_node)
 				(*z) = (*z)->parent;
 				rotate_right(&(*root), &(*z));
 			}
+			if((*z)->parent != nullptr && (*z)->parent->parent != nullptr )
+			{
 			(*z)->parent->isRed = false;
 			(*z)->parent->parent->isRed = true;
 			rotate_left(&(*root),&( ((*z)->parent->parent) ) );
+			}
 		}
-		if ((*z)->parent->parent == nullptr ) break;
+		if ( (*z)->parent == nullptr || (*z)->parent->parent == nullptr ) break;
 	}
 	(*root)->isRed = false;
 }
@@ -149,10 +155,14 @@ struct RBtree
 int main()
 {
 	RBtree A1;
-
+	
 	A1.insertion(8);
 	A1.insertion(6);
 	A1.insertion(3);
-
-
+	A1.insertion(10);
+	A1.insertion(12);
+	A1.insertion(20);
+	A1.insertion(1);
+	A1.insertion(2);
+	int x = 10;
 }
