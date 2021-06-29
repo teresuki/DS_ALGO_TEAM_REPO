@@ -50,22 +50,23 @@ void rotate_right(Node **root, Node **x)
 }
 
 // z is the new_node
-// y is the parent_current_node
-void RB_insert_fixup(Node **z, Node **root, Node **parent_current_node)
+// y is the uncle_node
+void RB_insert_fixup(Node **z, Node **root)
 {
+	Node *uncle_node = nullptr;
 	while( (*z)->parent != nullptr  && (*z)->parent->isRed == true )
 	{
 		if( (*z)->parent->parent != nullptr && (*z)->parent == (*z)->parent->parent->left)
 		{
-			(*parent_current_node) = (*z)->parent->parent->right;
-			if( (*parent_current_node) != nullptr && (*parent_current_node)->isRed == true )
+			(uncle_node) = (*z)->parent->parent->right;
+			if( (uncle_node) != nullptr && (uncle_node)->isRed == true )
 			{
 				(*z)->parent->isRed = false;  //case 1
-				(*parent_current_node)->isRed = false; //case 1
+				(uncle_node)->isRed = false; //case 1
 				(*z)->parent->parent->isRed = true; //case 1
 				(*z) = (*z)->parent->parent; //case 1
 			}
-			else if ( (*parent_current_node) == nullptr && (*z) == (*z)->parent->right )
+			else if ( (uncle_node) == nullptr && (*z) == (*z)->parent->right )
 			{
 				(*z) = (*z)->parent;  //case 2
 				rotate_left(&(*root) , &(*z) ); //case 2
@@ -79,15 +80,15 @@ void RB_insert_fixup(Node **z, Node **root, Node **parent_current_node)
 		}
 		else if ( (*z)->parent->parent != nullptr && (*z)->parent == (*z)->parent->parent->right )
 		{
-			(*parent_current_node) = (*z)->parent->parent->left;
-			if( (*parent_current_node) !=nullptr  && (*parent_current_node)->isRed == true)
+			(uncle_node) = (*z)->parent->parent->left;
+			if( (uncle_node) !=nullptr  && (uncle_node)->isRed == true)
 			{
 				(*z)->parent->isRed = false;
-				(*parent_current_node)->isRed = false;
+				(uncle_node)->isRed = false;
 				(*z)->parent->parent->isRed = true;
 				(*z) = (*z)->parent->parent;
 			}
-			else if( (*parent_current_node) == nullptr && (*z) == (*z)->parent->left )
+			else if( (uncle_node) == nullptr && (*z) == (*z)->parent->left ) 
 			{
 				(*z) = (*z)->parent;
 				rotate_right(&(*root), &(*z));
@@ -100,10 +101,34 @@ void RB_insert_fixup(Node **z, Node **root, Node **parent_current_node)
 			}
 		}
 		if ( (*z)->parent == nullptr || (*z)->parent->parent == nullptr ) break;
+		// if ( *root == *z) break;
 	}
 	(*root)->isRed = false;
 }
 
+void print_function(Node **root, std::string indent,bool print_right)
+{
+	if(*root != nullptr)
+	{
+		std::cout << indent;
+		if(print_right)
+		{
+			std::cout<<"R---"; //left side of the tree
+			indent += "\t";
+		}
+		else
+		{
+			std::cout <<"L---";
+			indent += "\t";
+		}
+		std::string color;
+		if((*root)->isRed == true) color = "RED";
+		else color = "BLACK";
+		std::cout << (*root)->value <<"("<< color << ")"<<'\n';
+		print_function( &((*root)->left)  ,indent,false);
+		print_function( &((*root)->right) ,indent,true);
+	}
+}
 struct RBtree
 {
 	Node *root = nullptr;
@@ -147,22 +172,35 @@ struct RBtree
 			parent_current_node->right = new_node;
 		}
 
-	RB_insert_fixup(&new_node,&(this->root),&parent_current_node);
+	RB_insert_fixup(&new_node,&(this->root));
 	}
-
+	void print_tree()
+	{
+		if(this->root != nullptr)
+		{
+			print_function(&(this->root),"",true);
+		}
+		else
+		{
+			std::cout<<"This tree doesn't have any nodes yet"<<'\n';
+		}
+	}
 };
 
 int main()
 {
-	RBtree A1;
-	
-	A1.insertion(8);
-	A1.insertion(6);
-	A1.insertion(3);
-	A1.insertion(10);
-	A1.insertion(12);
-	A1.insertion(20);
-	A1.insertion(1);
-	A1.insertion(2);
-	int x = 10;
+	RBtree tree;
+    tree.insertion(11);
+	std::cout << tree.root->value << '\n';
+    tree.insertion(2);
+    tree.insertion(14);
+    tree.insertion(1);
+    tree.insertion(7);
+    tree.insertion(5);
+    tree.insertion(8);
+    tree.insertion(12);
+
+
+	tree.print_tree();
+	// int x = 10;
 }
