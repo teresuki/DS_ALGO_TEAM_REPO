@@ -211,6 +211,7 @@ public:
                             {
                                 break;
                             }
+                            continue;
                         }
                         // case 2: y is black and node is right child
                         else if (node == node->p->right)
@@ -252,6 +253,7 @@ public:
                             {
                                 break;
                             }
+                            continue;
                         }
 
                         // case 5: y is black and node is left child
@@ -279,6 +281,7 @@ public:
                 }
                 root->color = black;
             }
+        root->color = black;
     }
     // reduce argument
     void insertNode(double value)
@@ -410,7 +413,7 @@ public:
 int main()
 {
 
-    int array[13] = {13, 6, 15, 17, 20, 9, 4, 3, 7, 2, 18, 8, 5};
+    int array[13] = {13, 6, 15, 17, 20, 9, 4, 3, 7, 2, 18, 10, 8};
     int array2[10] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
     RedBlackTree bst1;
     Node *root = bst1.getNodeRoot();
@@ -419,7 +422,9 @@ int main()
         bst1.insertNode(array[i]);
         bst1.printBT();
     }
+    std::cout << "Inorder Traversal: ";
     bst1.inorderTraversal();
+    std::cout << "Preorder Traversal: ";
     bst1.preorderTraversal();
     bst1.printAllNode();
 }
