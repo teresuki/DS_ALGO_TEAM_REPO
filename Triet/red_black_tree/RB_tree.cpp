@@ -17,8 +17,11 @@ void rotate_left(Node **root, Node **x)
 	Node *y = (*x)->right;
 	(*x)->right = y->left;
 	if (y->left != nullptr) y->left->parent = *x;
+
+	// for some weird reason when transferring the address of (*x)->parent to y->parrent the whole Node **x got erase, no pointer value and not even NAN
+	//for value, hence I have created a dummy x_copy so that it still retain the information in x, after x is deleted 
 	Node *x_copy = *x;
-	x_copy = *x;
+	x_copy = *x; // passing the value of x into x_copy via default copy constructor
 	y->parent = (*x)->parent;
 
 	if( (x_copy)->parent == nullptr) *root = y;
