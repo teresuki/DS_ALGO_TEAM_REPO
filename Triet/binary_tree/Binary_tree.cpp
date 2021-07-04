@@ -1,4 +1,5 @@
 #include <iostream>
+#include <memory>
 #include <cmath>
 
 struct Node
@@ -10,13 +11,6 @@ struct Node
 
 	Node(float value): value(value) {}
 
-	~Node()
-	{
-		this->value = NAN;
-		this->left = nullptr;
-		this->right = nullptr;
-		this->parent = nullptr;
-	}
 };
 
 class Btree
@@ -54,17 +48,6 @@ class Btree
 		return minimum_node;
 	}
 
-	void delete_entire_subtree(Node **subtree_root)
-	{
-		if(*subtree_root ==  nullptr) return;
-
-		delete_entire_subtree( &(*subtree_root)->left );
-		delete_entire_subtree( &(*subtree_root)->right );
-
-		Node *currrent_node = *subtree_root;
-		delete currrent_node; // delete the value in the current node
-		*subtree_root = nullptr; // setting the pointer to null
-	}
 
 	void transplant_tree(Node **replaced_tree, Node **transplanter_tree)
 	{
@@ -72,20 +55,10 @@ class Btree
 
 		if((*replaced_tree)->parent == nullptr) 
 		{
-			Node *old_root = *replaced_tree;
-
-			delete old_root;
-			*replaced_tree = nullptr;
-
 			this->root = *transplanter_tree;
-			if (*transplanter_tree != nullptr) (*transplanter_tree)->parent = nullptr; 
-
-			return;
 		}
 
-		Node *leftover_replaced_tree = *replaced_tree;
-
-		if (*replaced_tree == (*replaced_tree)->parent->left )
+		else if (*replaced_tree == (*replaced_tree)->parent->left )
 		{
 			(*replaced_tree)->parent->left = *transplanter_tree;	
 		}
@@ -96,7 +69,6 @@ class Btree
 
 		if (*transplanter_tree != nullptr) (*transplanter_tree)->parent = (*replaced_tree)->parent;
 
-		delete_entire_subtree( &leftover_replaced_tree);
 	}
 
 	public:
@@ -128,6 +100,25 @@ class Btree
 		}
 	}
 
+	void tree_delete_node(Node *wanted_node)
+	{
+		if( wanted_node->left == nullptr ) transplant_tree(&wanted_node, &(wanted_node->right));
+		
+		else if(wanted_node->right == nullptr) transplant_tree(&wanted_node,&(wanted_node->left));
+		else 
+		{
+			Node *new_root = tree_minimum_node(&(wanted_node->right));
+			if(new_root->parent != wanted_node)
+			{
+				transplant_tree(&new_root,&(new_root->right));
+				new_root->right = wanted_node->right;
+				new_root->right->parent = new_root;
+			}
+			transplant_tree(&wanted_node,&new_root);
+			new_root->left = wanted_node->left;
+			new_root->left->parent = new_root;
+		}
+	}
 
 	//if that node does not exist will return a nullpointer 
 	Node *search_node(float value)
@@ -144,14 +135,6 @@ class Btree
 		return current_node;
 	}
 
-	// void delete_node(float wanted_value)
-	// {
-		
-	// }
-	void test_transplant()
-	{
-		transplant_tree( &(this->root), &(this->root->right) );
-	}
 
 	void print_tree()
 	{
@@ -170,18 +153,20 @@ int main()
 {
 	Btree A1;
 	A1.tree_insert(7);
-	// A1.tree_insert(3);
+	A1.tree_insert(3);
 	A1.tree_insert(8);
 	A1.tree_insert(11);
-	// A1.tree_insert(1);
+	A1.tree_insert(1);
 
 	// A1.print_tree();
 
 	// Node *result = A1.search_node(12);
 	// if(result != nullptr ) std::cout << result->value <<'\n';
 	// else std::cout << "Exist no such node" <<'\n';
-	A1.test_transplant();
 	A1.print_tree();
+	Node *to_be_deleted = A1.search_node(8);
 
+	A1.tree_delete_node(to_be_deleted);
+	A1.print_tree();
 	return 0;
 }
