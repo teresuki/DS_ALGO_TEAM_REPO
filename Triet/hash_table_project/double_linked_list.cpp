@@ -139,7 +139,7 @@ int main()
 	insert_after(&head,2);
 	insert_after(&head,3);
 
-	// delete_node(&head,3);
+	delete_node(&head,3);
 
 	cout << search_node(&head,3) <<'\n';
 

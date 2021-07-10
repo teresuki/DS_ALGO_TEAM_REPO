@@ -158,11 +158,6 @@ int main()
 	A1.tree_insert(11);
 	A1.tree_insert(1);
 
-	// A1.print_tree();
-
-	// Node *result = A1.search_node(12);
-	// if(result != nullptr ) std::cout << result->value <<'\n';
-	// else std::cout << "Exist no such node" <<'\n';
 	A1.print_tree();
 	Node *to_be_deleted = A1.search_node(8);
 
