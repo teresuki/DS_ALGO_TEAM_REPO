@@ -10,8 +10,7 @@ int dynamic_fib(int n)
 		if(i <= 1) f[i] = i;
 		else f[i] = f[i-1] + f[i-2];
 	}
-	int result = f[n];
-	return result;
+	return f[n];
 }
 
 int main()
