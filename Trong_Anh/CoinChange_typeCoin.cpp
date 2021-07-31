@@ -56,27 +56,20 @@ void coin_change(int n, int N)
         }
     }
 
-    cout << "Only need " << t[n-1][N] << " coin (s) to pay. Including: " << endl;
-    cout << coinType[n-1][N][3] << " dollar(s)." << endl;
-    cout << coinType[n-1][N][2] << " quater(s)." << endl;
-    cout << coinType[n-1][N][1] << " dime(s)." << endl;
-    cout << coinType[n-1][N][0] << " penny(ies)." << endl;
+    cout << "You only need " << t[n-1][N] << " coin(s) to pay. Including: " << endl;
 
+    cout << coinType[n-1][N][0] << " penny(ies)." << endl;
+    cout << coinType[n-1][N][1] << " dime(s)." << endl;
+    cout << coinType[n-1][N][2] << " quater(s)." << endl;
+    cout << coinType[n-1][N][3] << " dollar(s)." << endl;
 }
 
 int main()
 {
-    int n, N;
-
-    cout << "Enter 1 if you only have dollars."<< endl;
-    cout << "Enter 2 if you have dollars and quaters."<< endl;
-    cout << "Enter 3 if you have dollars, quaters and dimes."<< endl;
-    cout << "Enter 4 if you have all types of coin." << endl;
-    cout << "Your number: ";   cin >> n;
-
+    int N;
 
     cout << "The value you need to pay: "; cin >> N;
 
-    coin_change(n,N);
+    coin_change(4,N);
     return 0;
 }
