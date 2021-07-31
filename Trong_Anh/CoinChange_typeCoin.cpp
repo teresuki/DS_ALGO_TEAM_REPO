@@ -33,7 +33,7 @@ void coin_change(int n, int N)
             {
                 t[i][j] = t[i-1][j];
                 for(int k = 0; k < n; ++k)
-                 coinType[i][j][k] = coinType[i-1][j][k];
+                    coinType[i][j][k] = coinType[i-1][j][k];
             }
             //In other case
             else
