@@ -1,63 +1,82 @@
 #include <iostream>
-#include <vector>
+
 using namespace std;
 
-int coin(int N);    // assume that n = 4
-vector<int> optimal_solution(4, 0);   // global container
-
-int coin(int N)
+void coin_change(int n, int N)
 {
-    int d[4] = {1, 10, 25, 100};
-    int t[4][N + 1];
+    int d[] = {1, 10, 25, 100};
+    int t[n][N+1];
+    //Create 3D array of coin type that needs to be change
+    int coinType[n][N+1][n];
 
-    // Base case
-    for(int i = 0; i < 4; i++)
+    /* Base case: No money */
+    for(int i = 0; i < n; ++i)
+    {
         t[i][0] = 0;
+        for(int k = 0; k < n; ++k)
+        coinType[i][0][k] = 0;
+    }
 
-    for(int i = 0; i < 4; i++)
+    for(int i = 0; i < n; ++i)
     {
-        for(int j = 1; j <= N; j++)
+        for(int j = 1; j <= N; ++j)
         {
-            if(i == 0)   // the 1st index must be 0, not 1
-                t[i][j] = t[i][j - d[i]] + 1;   // fill in the 1st row
+            //In case we have only penny
+            if(i == 0)
+            {
+                t[i][j] = t[i][j-d[i]] + 1;
+                coinType[i][j][0] = j;
+                for(int k = 1; k < n; ++k) coinType[i][j][k] = 0;
+            }
+            //In case the value have to pay smaller than the value of the coin we have
             else if(j < d[i])
-                t[i][j] = t[i - 1][j];          // fill in the rest, row by row
+            {
+                t[i][j] = t[i-1][j];
+                for(int k = 0; k < n; ++k)
+                 coinType[i][j][k] = coinType[i-1][j][k];
+            }
+            //In other case
             else
-                t[i][j] = min(t[i - 1][j], t[i][j - d[i]] + 1); // fill in the rest, row by row
+            {
+                //Not using "min" function to demonstrate the cointype loop easier
+                if(t[i-1][j] < t[i][j-d[i]] + 1)
+                {
+                    t[i][j] = t[i-1][j];
+                    for(int k = 0; k < n; ++k)
+                        coinType[i][j][k] = coinType[i-1][j][k];
+                }
+                else
+                {
+                    t[i][j] = t[i][j-d[i]] + 1;
+                    for(int k = 0; k < n; ++k)
+                        coinType[i][j][k] = coinType[i][j-d[i]][k];
+                        coinType[i][j][i]++;
+                }
+            }
         }
     }
 
-    // Construct the optimal solution from the table
-    int i = 3, j = N;
-    while(i != 0)     // start at entry t[n, N]
-    {
-        if(t[i][j] == t[i - 1][j])
-            i--;
-        if(t[i][j] == t[i][j - d[i]] + 1)
-        {
-            optimal_solution[i] += 1;
-            j = j - d[i];
-        }
-    }
+    cout << "Only need " << t[n-1][N] << " coin (s) to pay. Including: " << endl;
+    cout << coinType[n-1][N][3] << " dollar(s)." << endl;
+    cout << coinType[n-1][N][2] << " quater(s)." << endl;
+    cout << coinType[n-1][N][1] << " dime(s)." << endl;
+    cout << coinType[n-1][N][0] << " penny(ies)." << endl;
 
-    return t[3][N];
 }
-int main(void)
+
+int main()
 {
-    int N;
+    int n, N;
 
-    cout << "Enter the amount of money needed to pay back: N = ";
-    cin >> N;
+    cout << "Enter 1 if you only have dollars."<< endl;
+    cout << "Enter 2 if you have dollars and quaters."<< endl;
+    cout << "Enter 3 if you have dollars, quaters and dimes."<< endl;
+    cout << "Enter 4 if you have all types of coin." << endl;
+    cout << "Your number: ";   cin >> n;
 
-    int result = coin(N);   // call only 1 because of the global container optimal_solution will change each call
-    cout << "\nThe smallest amount of coins needed is: ";
-    cout << result << endl;
 
-    cout << "\nThe optimal solution is: " << endl;
-    cout << "one dollars: " << optimal_solution[3] << endl;
-    cout << "quarters: " << optimal_solution[2] << endl;
-    cout << "dimes: " << optimal_solution[1] << endl;
-    cout << "pennies " << result - optimal_solution[3] - optimal_solution[2] - optimal_solution[1] << endl;
+    cout << "The value you need to pay: "; cin >> N;
 
+    coin_change(n,N);
     return 0;
 }
