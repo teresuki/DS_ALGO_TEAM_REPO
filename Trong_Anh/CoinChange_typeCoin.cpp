@@ -2,9 +2,11 @@
 
 using namespace std;
 
-void coin_change(int n, int N)
+//void coin_change(int n, int N)
+void coin_change(int N)
 {
     int d[] = {1, 10, 25, 100};
+    int n = sizeof (d) / sizeof (d[0]);
     int t[n][N+1];
     //Create 3D array of coin type that needs to be change
     int coinType[n][N+1][n];
@@ -70,6 +72,8 @@ int main()
 
     cout << "The value you need to pay: "; cin >> N;
 
-    coin_change(4,N);
+    //coin_change(4,N);
+    coin_change(N);
+
     return 0;
 }
