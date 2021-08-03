@@ -1,9 +1,10 @@
 #include <iostream>
 #include <vector>
+#include <stdlib.h> // Calloc
 #define INF 999999999;
 using namespace std;
 
-static int POS_COUNT = 0;
+int POS_COUNT = 0;
 struct Node
 {
     int pos;
@@ -12,34 +13,36 @@ struct Node
         pos = POS_COUNT;
         POS_COUNT++;
     }
-    Node(int nullPos)
+    Node(int nullPos) // for NIL Node
     {pos = nullPos;}
 };
 
 struct Graph
 {
-    vector <Node> Q;
-    int **w = nullptr; //Adjacency Matrix with weight
+    vector <Node> Q; // Set of all vertices
+    int **w = nullptr; //Adjacency Matrix with weight (Set of Edges alternative)
     int nodeCount = 0;
+
     Graph(){}
     Graph(vector <Node> nodeList)
     {
         Q = nodeList;
         nodeCount = Q.size();
 
-        //Dynamic allocating space for adjacency Matrix
-        w = new int*[nodeCount];
+        //Dynamic allocating 2D array for adjacency Matrix
+        //And every value are set to 0
+        w = (int**) calloc(nodeCount, sizeof(int*)); // Rows
         for(int i = 0; i < nodeCount; ++i)
-         w[i] = new int[nodeCount];
-
-        for(int i = 0; i < nodeCount; ++i)
-        {
-            for(int j = 0; j < nodeCount; ++j)
-             w[i][j] = 0;
-        }
+         w[i] = (int*) calloc(nodeCount, sizeof(int)); // Columns
     }
 
-    //Add Edge function
+    ~Graph()
+    {
+        for(int i = 0; i < nodeCount; ++i)
+         delete w[i];
+        delete[] w;
+    }
+
     void addEdge(Node u, Node v, int weight)
     {
         w[u.pos][v.pos] = weight;
@@ -63,9 +66,10 @@ struct Graph
         Node NIL(-1);
         int *key = new int[nodeCount];
         Node *p = new Node[nodeCount];
-        bool *passed = new bool[nodeCount]; // boolean of passed (have been gone over) vertices
-        for(int i = 0; i < Q.size(); ++i)
-         {key[i] = INF; passed[i] = false;}
+        bool *hasPassed = new bool[nodeCount]; // to check if that node has been gone through or not. (AKA belongs to MST already)
+        
+        for(int i = 0; i < nodeCount; ++i)
+         {key[i] = INF; hasPassed[i] = false;}
         key[0] = 0;
         p[0] = NIL;
 
@@ -74,12 +78,12 @@ struct Graph
         for(int i = 0; i < nodeCount; ++i)
         {
             //ExtractMinQ
-            //We need minKey and minLocation to update passed vertices.
+            //We need minKey and minLocation to update hasPassed vertices.
             int minKey = INF;
             int minLocation = 0;
             for(int j = 0; j < nodeCount; ++j)
             {
-                if(key[j] < minKey && passed[j] == false)
+                if(key[j] < minKey && hasPassed[j] == false)
                  {
                      u = Q[j];
                      minKey = key[j];
@@ -88,29 +92,34 @@ struct Graph
             }
             cout << "Go from " << p[minLocation].pos << " to " << minLocation << ". Weight: " << minKey << endl;
             ans += minKey;
-            passed[minLocation] = true;
+            hasPassed[minLocation] = true;
 
-            if(i == nodeCount - 1) break; // Passed the last vertex so we stop.
+            if(i == nodeCount - 1) break; // hasPassed the last vertex so we stop.
             
             for(int j = 0; j < nodeCount; ++j)
             {
-                //Check for adjacent vertices that has not been go through
-                if(w[u.pos][j] != 0 && passed[j] == false)
-                {
-                    v = Q[j];
-                    if(w[u.pos][v.pos] < key[v.pos])
-                    {
-                        p[v.pos] = u;
-                        key[v.pos] = w[u.pos][v.pos];
-                    }
-                }
-            }
+                v = Q[j];
+                
+                //Guard clauses for better readability
+                if(w[u.pos][j] == 0)
+                 continue;
 
+                if(hasPassed[j] == true)
+                 continue;
+                
+                if(w[u.pos][v.pos] >= key[v.pos])
+                 continue;
+                
+                p[v.pos] = u;
+                key[v.pos] = w[u.pos][v.pos];
+            }
         }
+
       //Free dynamic arrays
       delete[] key;
       delete[] p;
-      delete[] passed;
+      delete[] hasPassed;
+
       cout << "Total weight of MST: " << ans << endl;
     }
 };
@@ -137,7 +146,7 @@ int main()
 
     //graph.printWay();
     graph.MST();
-
+    
     return 0;
 }
 
