@@ -98,6 +98,4 @@ int main()
 	G.print_MST();
 		// G.print_MST();
 	// G.print_all_edges();
-
-
 }
