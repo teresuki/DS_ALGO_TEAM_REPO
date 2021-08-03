@@ -7,9 +7,6 @@
 
 using namespace std;
 
-//Create a C++ pair container to store the weight and the start and end point into an edge instance. 
-//rmb that we are operating on a weighted graph
-typedef pair<int, int> start_end;
 
 #define V 4
 
@@ -55,9 +52,6 @@ void find_MST_prim(int Graph[V][V])
 		int u = Extract_min(key,vertex_in_MST);
 
 		vertex_in_MST[u] = true;
-		//finding all the vertex that is adjacent to u
-		// if (graph[u][v] && mstSet[v] == false && graph[u][v] < key[v])
-        //         parent[v] = u, key[v] = graph[u][v];
 		for(int destination=0; destination < V; destination++)
 		{
 			if(Graph[u][destination] != 0 && vertex_in_MST[destination] == false && Graph[u][destination] < key[destination])
