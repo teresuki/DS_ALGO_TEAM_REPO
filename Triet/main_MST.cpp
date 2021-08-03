@@ -58,7 +58,7 @@ class Graph
 		set<char> add_MST_vertex;
 
 		sort(weighted_edges.begin(),weighted_edges.end());
-		while(MST_vertex != all_vertex)
+		while(MST.size() != all_vertex.size()-1)
 		{
 			add_MST_vertex = MST_vertex;
 			char from = weighted_edges[0].second.first;
@@ -75,25 +75,39 @@ class Graph
 					MST_vertex.insert(*new_vertex);
 				}
 			}
+			else if(MST.size() == all_vertex.size()-2)
+			{
+				
+			}
+
+			weighted_edges.push_back(weighted_edges[0]);
 			weighted_edges.erase(weighted_edges.begin());
 
 		}
 
 	}
-
-
 };
 
 int main()
 {
 	Graph G;
+
 	G.add_weighted_edge(12,'A','B');
 	G.add_weighted_edge(5,'A','C');
 	G.add_weighted_edge(4,'A','D');
-
 	G.add_weighted_edge(9,'B','C');
 	G.add_weighted_edge(11,'B','D');
 	G.add_weighted_edge(2,'C','D');
+	G.add_weighted_edge(2,'C','E');
+	G.add_weighted_edge(4,'C','F');
+	G.add_weighted_edge(7,'D','E');
+	G.add_weighted_edge(1,'D','G');
+	G.add_weighted_edge(6,'E','H');
+	G.add_weighted_edge(3,'E','G');
+	G.add_weighted_edge(8,'F','G');
+	G.add_weighted_edge(1,'F','H');
+	
+
 	G.MST_Kruskal();
 	G.print_MST();
 		// G.print_MST();
