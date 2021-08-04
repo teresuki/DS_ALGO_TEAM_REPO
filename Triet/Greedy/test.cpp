@@ -1,18 +1,23 @@
 #include <iostream>
+#include <vector>
 #include <map>
 
 using namespace std;
 
+// int cmpfunc (const pair<int.char> * a, const void * b) {
+//    return ( (pair<int,char>*)a->first - *(int*)b );
+// }
+int comp(const pair<int,char>  a , const pair <int,char> b)
+{
+	return (    a->first - b->first     );
+}
+
 int main()
 {
-	map<char,int> test;
+	vector<pair <int, char > > the_list;
 
-	test.insert(pair<char,int>('a',3));
-	
-	auto instant = test.find('b');
-
-	instant->second++;
-
-	cout << instant->first << '\t' <<instant->second <<'\n';
+	the_list.push_back({1,'a'});
+	the_list.push_back({2,'b'});
+	the_list.push_back({3,'c'});
 
 }

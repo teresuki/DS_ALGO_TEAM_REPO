@@ -1,48 +1,24 @@
 #include <iostream>
 #include <set>
-#include <vector>
 #include <algorithm>
 #include <map>
+#include <vector>
 
 using namespace std;
 
-struct comp {
-    template <typename T>
-  
-    // Comparator function
-    bool operator()(const T& l,
-                    const T& r) const
-    {
-        if (l.second != r.second) {
-            return l.second < r.second;
-        }
-        return l.first < r.first;
-    }
-};
-  
-// Function to sort the map according
-// to value in a (key-value) pairs
-void sort_by_second_value(map<char, int>& M)
+struct Node
 {
-  
-    // Declare set of pairs and insert
-    // pairs according to the comparator
-    // function comp()
-    set<pair<char, int>, comp> S(M.begin(),
-                                   M.end());
-  
-    // Print the sorted value
-    for (auto& it : S) {
-        cout << it.first << '\t'
-             << it.second << endl;
-    }
-}
+	int frequency=0;
+	char character='\0';
+	Node *left = nullptr;
+	Node *right = nullptr;
+};
 
 class Document
 {
 	private:
-	// vector< pair<char,
 	map<char,int> frequency_of_char;
+	Node *root = nullptr;
 
 	public:
 	void insert_plain_text()
@@ -65,8 +41,22 @@ class Document
 			}
 		}
 
-		sort_by_second_value(frequency_of_char);
+	}
 
+	void build_frequency_tree()
+	{
+		//transfer the frequenc tree to vector
+		vector<pair <int,char> > the_list;
+		for(auto itr = frequency_of_char.begin(); itr != frequency_of_char.end(); itr++)
+		{
+			the_list.push_back({itr->second,itr->first});
+		}
+		
+
+		for(int i =0; i < the_list.size(); i++)
+		{
+			cout<<the_list[i].first <<'\t' << the_list[i].second <<'\n';
+		}
 
 	}
 
@@ -77,5 +67,6 @@ int main()
 	Document D1;
 
 	D1.insert_plain_text();
+	D1.build_frequency_tree();	
 
 }
