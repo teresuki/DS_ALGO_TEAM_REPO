@@ -1,5 +1,4 @@
 #include <iostream>
-#include <set>
 #include <algorithm>
 #include <map>
 #include <vector>
@@ -77,7 +76,8 @@ class Document
 	void insert_plain_text()
 	{	
 		cout<<"Enter the input text: ";
-		cin >> this->usr_input;
+		// cin >> this->usr_input;
+		getline(cin,this->usr_input);
 
 
 		for(int c=0; c < usr_input.size(); c++)
@@ -185,7 +185,7 @@ class Document
 
 		string huff_text;
 		cout<<"this function only works if you encode the text and decode with the same Document object"<<'\n';
-		cout<<"Copy the output bit string above"<<'\n';
+		cout<<"Copy the output bit string above and paste it down below"<<'\n';
 		cout<<"Enter the bit string you want to decode:";
 		cin >> huff_text;
 		Node *current_node = this->root;
@@ -212,11 +212,6 @@ class Document
 int main()
 {
 	Document D1;
-
-	// D1.insert_plain_text();
-	// D1.build_frequency_tree();	
-	// D1.map_char_huff_code();
-	// D1.translate_to_huffman();
 	D1.text_to_huffman();
 	D1.huffman_to_text();
 }
