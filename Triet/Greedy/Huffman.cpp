@@ -196,15 +196,9 @@ class Document
 			{
 			if(huff_text[i] == '0') {current_node = current_node->left;}
 			if(huff_text[i] == '1') {current_node = current_node->right;}
-
-				if(current_node->character != '\0' )
-				{
-					cout<<current_node->character;
-					current_node = this->root;
-				}
-			
 			}
-			else
+
+			if(current_node->character != '\0' )
 			{
 				cout<<current_node->character;
 				current_node = this->root;
