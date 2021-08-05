@@ -190,12 +190,12 @@ class Document
 		cin >> huff_text;
 		Node *current_node = this->root;
 		
-		while(huff_text.size() >	0 )
+		for(int i=0; i < huff_text.size();i++)
 		{
 			if(current_node->character == '\0')
 			{
-			if(huff_text[0] == '0') {current_node = current_node->left;}
-			if(huff_text[0] == '1') {current_node = current_node->right;}
+			if(huff_text[i] == '0') {current_node = current_node->left;}
+			if(huff_text[i] == '1') {current_node = current_node->right;}
 
 				if(current_node->character != '\0' )
 				{
@@ -209,7 +209,6 @@ class Document
 				cout<<current_node->character;
 				current_node = this->root;
 			}
-			huff_text.erase(0,1);
 		}
 		putchar('\n');
 	}
