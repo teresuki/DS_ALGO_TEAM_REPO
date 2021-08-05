@@ -46,7 +46,7 @@ public:
 			D.push_back(matrix[0][i+1]);
 		}
 
-		//repeat n-1 times
+		//repeat n-1 times for n-1 nodes (except from starting node)
 		for (int i = 1; i<numNode; i++) {
 			//find node with min cost in D
 			int min_node = C[0] - 1;
@@ -80,6 +80,7 @@ public:
 		}
 
 		cout<<"This is the minimum cost to get from 0 to other nodes: "<<endl;
+		cout<<"(0 = s;    1 = t;    2 = x;    3 = y;    4 = z)"<<endl;
 		for (int i = 0; i<D.size(); i++) {
 			cout<<"0 to "<<i+1<<": "<<D[i]<<endl;
 		}
@@ -90,14 +91,16 @@ int main() {
 	
 	Graph g(5);
 
-	g.addEdge(0,1,50);
-	g.addEdge(0,2,30);
-	g.addEdge(0,3,100);
-	g.addEdge(0,4,10);
-	g.addEdge(2,1,5);
-	g.addEdge(2,3,50);
-	g.addEdge(3,1,20);
-	g.addEdge(4,3,10);
+	g.addEdge(0,1,10);
+	g.addEdge(0,3,5);
+	g.addEdge(1,2,1);
+	g.addEdge(1,3,2);
+	g.addEdge(2,4,4);
+	g.addEdge(3,1,3);
+	g.addEdge(3,2,9);
+	g.addEdge(3,4,2);
+	g.addEdge(4,0,7);
+	g.addEdge(4,2,6);
 
 	g.dijkstra();
 
