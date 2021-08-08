@@ -6,7 +6,6 @@
 
 using namespace std;
 
-
 struct Node
 {
     int pos;
@@ -26,9 +25,7 @@ struct Graph
 
         //Assign position for nodes in Q
         for(int i = 0; i < nodeCount; ++i)
-        {
             Q[i].pos = i;
-        }
 
         //Dynamic allocating 2D array for adjacency Matrix
         //And every value are set to 0
@@ -69,15 +66,21 @@ struct Graph
         for(int i = 0; i < nodeCount; ++i)
          D[i] = L[0][i];
         
-        // vector <vector <bool>> wayTrack {false};
-        // wayTrack.resize(nodeCount);
+         vector <vector <bool>> nodeTrack {false};
+         nodeTrack.resize(nodeCount);
+         for(int i = 0; i < nodeCount; ++i)
+         {
+            nodeTrack[i].resize(nodeCount);
+            if(L[i][0] != 0)
+             nodeTrack[i][0] = true; // From Starting node to other node
+         }
  
         vector <bool> hasPassed;
         hasPassed.resize(nodeCount, false);
         hasPassed[0] = true;
         for(int i = 1; i < nodeCount; ++i)
         {
-            //min D
+            //Choose min D
             int minD = INF;
             int minPos;
             Node v;
@@ -109,19 +112,30 @@ struct Graph
                  continue;
                 
                 D[w.pos] = D[v.pos] + L[v.pos][w.pos];
-                
+
+                for(int k = 0; k < nodeCount; ++k)
+                 nodeTrack[w.pos][k] = nodeTrack[v.pos][k];
+                nodeTrack[w.pos][v.pos] = true;
             }
         }
 
-       int result = 2;
+       //Change your desired destination node here (1, 2, 3, 4, 5)
+       int result = 4;
        cout << "Shortest total weight to " << result  << ": " << D[result - 1] << endl;
+       cout << "Node passed by: ";
+       for(int i = 0; i < nodeCount; ++i)
+       {
+           if(nodeTrack[result-1][i] == true)
+            cout << i+1 << " ";
+       }
+       cout << endl;
     }
-
 };
-
 
 int main()
 {
+    auto start = chrono::high_resolution_clock::now();
+    
     Node nodes[5];
     int nodeCount = sizeof(nodes) / sizeof(nodes[0]);
     vector <Node> nodeList (nodes, nodes + nodeCount);
@@ -134,7 +148,13 @@ int main()
     graph.addEdge(2, 3, 50);
     graph.addEdge(3, 1, 20);
     graph.addEdge(4, 3, 10);
-    graph.printWay();
+    //graph.printWay();
     graph.dijkstra();
+
+    auto end = chrono::high_resolution_clock::now();
+    double runTime = (double) (chrono::duration_cast <chrono::milliseconds> (end-start).count());
+    cout << "Run time: "  << runTime << " ms." << endl;
+
+    return 0;
 
 }
