@@ -47,8 +47,8 @@ bool is_leaf(Node* x)
 // Traverse the Huffman tree and get the Huffman codecvt
 void Huffman_encode(Node* x, string str, map<char, string>& Huffman_code) // need pass by reference
 {
-    if(x == nullptr)    // for "aaa" case, go to the end of
-        return;         // tree, need to terminate
+    if(x == nullptr)    // go to the end of tree,
+        return;         // need to terminate
 
     // x is a leaf node
     if(is_leaf(x))
