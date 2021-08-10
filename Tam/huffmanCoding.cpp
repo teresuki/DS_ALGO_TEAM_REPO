@@ -36,6 +36,7 @@ class HuffmanPrefixCode
 public:
     std::vector<Node *> list;
     std::string plainText;
+    std::string decodingString;
     std::string characterList;
     std::vector<std::string> encodingList;
     std::map<char, std::string> encodingTable;
@@ -185,6 +186,50 @@ public:
         }
         std::cout << "Output encoding string: " << encoding << '\n';
     }
+
+    std::string inputDecoding()
+    {
+        std::string decodingString;
+        std::cout << "Input decoding string: ";
+        std::cin >> decodingString;
+        return decodingString;
+    }
+
+    void decoding()
+    {
+        std::string decodingString = inputDecoding();
+        Node *root = list[0];
+        std::cout << "Decoded string: ";
+        for (int i = 0; i < decodingString.size() + 1; i++)
+        {
+            if (i == decodingString.size() + 1)
+            {
+                std::cout << "Wrong decoding string" << '\n';
+                break;
+            }
+            else
+            {
+
+                if (root->character != '-')
+                {
+                    std::cout << root->character;
+                    root = list[0];
+                    i--;
+                }
+                else
+                {
+                    if (decodingString[i] == '0')
+                    {
+                        root = root->left;
+                    }
+                    else
+                    {
+                        root = root->right;
+                    }
+                }
+            }
+        }
+    }
 };
 
 void test();
@@ -199,4 +244,5 @@ void test()
     hpc.inputString("floccinaucinihilipilification");
     hpc.encoding();
     hpc.outputString();
+    hpc.decoding();
 }
