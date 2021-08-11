@@ -83,17 +83,16 @@ class Graph
 		//set distance to source to 0 so it will be picked first
 		D[source] = 0;
 
-		for(int time=0; time < this->vertices -1; time++) //repeat N-1 times
+		for(int time=0; time < this->vertices -1; time++) //repeat N-1 times for N-1 remainding nodes
 		{
-			int u = find_index_min_D(D, S);
+			int v = find_index_min_D(D, S);
 	
-			S[u] = true;
+			S[v] = true;
 	
-			// Update dist value of the adjacent vertices of the picked vertex.
-			for (int v = 0; v < this->vertices; v++)
-				if (S[v] == false && adjacency_weighted_matrix[u][v] != 0 && D[u] != numeric_limits<double>::infinity()
-					&& D[u] + adjacency_weighted_matrix[u][v] < D[v])
-					D[v] = D[u] + adjacency_weighted_matrix[u][v];
+
+			for (int to = 0; to < this->vertices; to++)
+				if (S[to] == false && adjacency_weighted_matrix[v][to] != 0) // only update if the node is not included and there is a path from the current node to it
+					D[to] =min(D[v] + adjacency_weighted_matrix[v][to], D[to]);
 		}	
 		print_final_result(D);
 	}
@@ -103,8 +102,7 @@ int main()
 {
 	Graph G1(5);
 
-	// s is 0, t is 1, y is 2, x is 3 and z is 4
-
+	// (0 = s;    1 = t;    2 = x;    3 = y;    4 = z)
 	G1.add_weighted_egde(0,1,10);
 	G1.add_weighted_egde(0,3,5);
 	G1.add_weighted_egde(1,2,1);
@@ -117,15 +115,6 @@ int main()
 	G1.add_weighted_egde(4,2,6);
 
 
-
-	// G1.add_weighted_egde(0,1,50);
-	// G1.add_weighted_egde(0,2,30);
-	// G1.add_weighted_egde(0,3,100);
-	// G1.add_weighted_egde(0,4,10);
-	// G1.add_weighted_egde(2,1,5);
-	// G1.add_weighted_egde(2,3,50);
-	// G1.add_weighted_egde(3,1,20);
-	// G1.add_weighted_egde(4,3,10);
 
 	G1.print_adjacency_matrix();
 	putchar('\n');

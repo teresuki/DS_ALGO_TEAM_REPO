@@ -1,115 +1,24 @@
 #include <iostream>
 #include <vector>
 #include <set>
+#include <climits>
 #include <algorithm>
 //MST 
 
 using namespace std;
 
-//Create a C++ pair container to store the weight and the start and end point into an edge instance. 
-//rmb that we are operating on a weighted graph
-typedef pair<char, char> start_end;
-
 class Graph
 {
-	private:
-	set<char> all_vertex;
-	vector< pair<int, start_end> > weighted_edges;
-	vector< pair<int, start_end> > MST;
+	private
+}
 
-	public:
-	void add_weighted_edge(int weight, char start, char end)
-	{
-		weighted_edges.push_back({weight,{start,end}});
-		all_vertex.insert(start);
-		all_vertex.insert(end);
-	}
-
-	void print_all_edges()
-	{
-		for(int i=0; i <weighted_edges.size(); i++)
-		{
-			cout<<weighted_edges[i].second.first<<"----" << weighted_edges[i].second.second<<"\t" <<weighted_edges[i].first<<'\n';
-		}
-	}
-
-	void print_MST()
-	{
-		for(int i=0; i <MST.size(); i++)
-		{
-			cout<<MST[i].second.first<<"----" << MST[i].second.second<<"\t" <<MST[i].first<<'\n';
-		}
-	}
-
-	void print_all_vertex()
-	{
-		
-		set<char>::iterator vertex_itr;
-		for(vertex_itr= all_vertex.begin(); vertex_itr != all_vertex.end(); vertex_itr++)
-		{
-			cout<< *vertex_itr <<'\n';
-		}
-		
-	}
-
-	void MST_Kruskal()
-	{
-		set<char> MST_vertex;
-		set<char> add_MST_vertex;
-
-		sort(weighted_edges.begin(),weighted_edges.end());
-		while(MST.size() != all_vertex.size()-1)
-		{
-			add_MST_vertex = MST_vertex;
-			char from = weighted_edges[0].second.first;
-			char to = weighted_edges[0].second.second;
-			add_MST_vertex.insert(from);
-			add_MST_vertex.insert(to);
-
-			if(add_MST_vertex != MST_vertex)
-			{
-				MST.push_back(weighted_edges[0]);
-				set<char>::iterator new_vertex;
-				for(new_vertex = add_MST_vertex.begin(); new_vertex != add_MST_vertex.end(); new_vertex++)
-				{
-					MST_vertex.insert(*new_vertex);
-				}
-			}
-			else if(MST.size() == all_vertex.size()-2)
-			{
-				
-			}
-
-			weighted_edges.push_back(weighted_edges[0]);
-			weighted_edges.erase(weighted_edges.begin());
-
-		}
-
-	}
-};
 
 int main()
 {
-	Graph G;
-
-	G.add_weighted_edge(12,'A','B');
-	G.add_weighted_edge(5,'A','C');
-	G.add_weighted_edge(4,'A','D');
-	G.add_weighted_edge(9,'B','C');
-	G.add_weighted_edge(11,'B','D');
-	G.add_weighted_edge(2,'C','D');
-	G.add_weighted_edge(2,'C','E');
-	G.add_weighted_edge(4,'C','F');
-	G.add_weighted_edge(7,'D','E');
-	G.add_weighted_edge(1,'D','G');
-	G.add_weighted_edge(6,'E','H');
-	G.add_weighted_edge(3,'E','G');
-	G.add_weighted_edge(8,'F','G');
-	G.add_weighted_edge(1,'F','H');
+	int matrix[4][4] = {{0,5,4,12},
+					  {5,0,2,9},
+					  {4,2,0,11},
+					  {12,9,11,0}};
 	
-
-	G.MST_Kruskal();
-	G.print_MST();
-		// G.print_MST();
-	// G.print_all_edges();
+	// find_MST_prim(matrix);
 }
