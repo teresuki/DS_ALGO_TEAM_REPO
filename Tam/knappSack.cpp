@@ -40,7 +40,7 @@ int k(int n, int W)
             // fill the first row condition
             if (i == 0)
             {
-                if (w <= W)
+                if (w <= j)
                 {
                     K[i][j] = v;
                 }
@@ -52,7 +52,7 @@ int k(int n, int W)
             // fill matrix by max(K[i-1][j], K[i-1][j-w] + v)
             else
             {
-                if (j > w)
+                if (j >= w)
                 {
                     K[i][j] = max(K[i - 1][j - w] + v, K[i - 1][j]);
                 }
@@ -81,6 +81,7 @@ int k(int n, int W)
     while (!isFound)
     {
         int w = allObj[a].weight;
+        int v = allObj[a].value;
         if (K[a][b] == 0)
         {
             isFound = true;
@@ -96,14 +97,14 @@ int k(int n, int W)
                 }
                 else
                 {
-                    std::cout << "Use object " << a << '\n';
+                    std::cout << "Use object " << a + 1 << ": weight: " << w << ", value: " << v << '\n';
                     a -= 1;
                     b -= w;
                 }
             }
             else if (K[a][b] != 0)
             {
-                std::cout << "Use object " << a << '\n';
+                std::cout << "Use object " << a + 1 << ": weight: " << w << ", value: " << v << '\n';
                 break;
             }
             else
@@ -114,7 +115,60 @@ int k(int n, int W)
     }
     return K[n - 1][W];
 }
+void randomizeObject();
+void testCase();
+
 int main()
+{
+    std::cout << "Test case: " << '\n';
+    testCase();
+    std::cout << "\n\n";
+    std::cout << "Make random objects: " << '\n';
+    randomizeObject();
+}
+void testCase()
+{
+    srand(time(NULL));
+    int n = 6, W = 10; // 6 items, 10 total weight
+    Object obj1;
+    obj1.weight = 3;
+    obj1.value = 7;
+    allObj.push_back(obj1);
+
+    Object obj2;
+    obj2.weight = 2;
+    obj2.value = 10;
+    allObj.push_back(obj2);
+
+    Object obj3;
+    obj3.weight = 6;
+    obj3.value = 2;
+    allObj.push_back(obj3);
+
+    Object obj4;
+    obj4.weight = 1;
+    obj4.value = 3;
+    allObj.push_back(obj4);
+
+    Object obj5;
+    obj5.weight = 7;
+    obj5.value = 2;
+    allObj.push_back(obj5);
+
+    Object obj6;
+    obj6.weight = 4;
+    obj6.value = 6;
+    allObj.push_back(obj6);
+    std::cout << 1 << " weight: " << allObj[0].weight << ", value: " << allObj[0].value << '\n';
+    std::cout << 2 << " weight: " << allObj[1].weight << ", value: " << allObj[1].value << '\n';
+    std::cout << 3 << " weight: " << allObj[2].weight << ", value: " << allObj[2].value << '\n';
+    std::cout << 4 << " weight: " << allObj[3].weight << ", value: " << allObj[3].value << '\n';
+    std::cout << 5 << " weight: " << allObj[4].weight << ", value: " << allObj[4].value << '\n';
+    std::cout << 6 << " weight: " << allObj[5].weight << ", value: " << allObj[5].value << '\n';
+    int maxValue = k(n, W);
+    std::cout << "Max value: " << maxValue;
+}
+void randomizeObject()
 {
     srand(time(NULL));
     int n, W;
