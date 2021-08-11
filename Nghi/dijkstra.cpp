@@ -86,10 +86,10 @@ public:
 			}
 		}
 
-		cout<<"This is the minimum cost to get from 0 to other nodes: "<<endl;
+		cout<<"This is the minimum cost to get from "<<start<<" to other nodes: "<<endl;
 		cout<<"(0 = s;    1 = t;    2 = x;    3 = y;    4 = z)"<<endl;
 		for (auto i = D.begin(); i!=D.end(); i++) {
-			cout<<"0 to "<<i->first<<": "<<i->second<<endl;
+			cout<<start<<" to "<<i->first<<": "<<i->second<<endl;
 		}
 	}
 };
