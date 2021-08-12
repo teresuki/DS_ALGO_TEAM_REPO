@@ -1,7 +1,5 @@
 #include <iostream>
 #include <vector>
-#include <map>
-#include <iterator>
 using namespace std;
 
 struct Node
@@ -13,11 +11,8 @@ struct Node
 
     Node() {}
 
-    Node(const Node& otherNode)
-        : frequency(otherNode.frequency)
-        , letter(otherNode.letter)
-        , left(otherNode.left)
-        , right(otherNode.right)
+    Node(const Node &otherNode)
+        : frequency(otherNode.frequency), letter(otherNode.letter), left(otherNode.left), right(otherNode.right)
     {
     }
 
@@ -216,9 +211,23 @@ struct BinaryTree
         cout << endl;
         for (int i = 1; i < space; ++i)
             cout << "   ";
-        cout << node->frequency << endl;
+        cout << node->frequency << "(" << node->letter << ")" << endl;
 
         printTree2D(node->left, space);
+    }
+
+    void printEncodeTable(Node *node, string encodeString)
+    {
+        if (node == NULL)
+            return;
+
+        printEncodeTable(node->left, encodeString + "0");
+        if (node->leftChild() == false && node->rightChild() == false)
+        {
+            cout << node->letter << ":" << encodeString << endl;
+            encodeString = encodeString.substr(0, encodeString.size() - 1);
+        }
+        printEncodeTable(node->right, encodeString + "1");
     }
 };
 
@@ -253,7 +262,7 @@ Node *huffmanEncode(vector<Node> &theList)
             }
         }
         root = z;
-        cout << "Foobar" << endl;
+        //cout << "Foobar" << endl;
     }
     return root;
 }
@@ -262,8 +271,8 @@ int main()
 {
     BinaryTree bt;
     vector<Node> nodeList;
-    nodeList.resize(5);
-    for (int i = 0; i < 5; ++i)
+    nodeList.resize(26);
+    for (int i = 0; i < 26; ++i)
     {
         nodeList[i].frequency = i + 1;
         nodeList[i].left = nullptr;
@@ -275,30 +284,30 @@ int main()
     nodeList[2].letter = 'X';
     nodeList[3].letter = 'J';
     nodeList[4].letter = 'K';
-    // nodeList[5].letter = 'V';
-    // nodeList[6].letter = 'B';
-    // nodeList[7].letter = 'P';
-    // nodeList[8].letter = 'Y';
-    // nodeList[9].letter = 'G';
-    // nodeList[10].letter = 'F';
-    // nodeList[11].letter = 'W';
-    // nodeList[12].letter = 'M';
-    // nodeList[13].letter = 'U';
-    // nodeList[14].letter = 'C';
-    // nodeList[15].letter = 'L';
-    // nodeList[16].letter = 'D';
-    // nodeList[17].letter = 'R';
-    // nodeList[18].letter = 'H';
-    // nodeList[19].letter = 'S';
-    // nodeList[20].letter = 'N';
-    // nodeList[21].letter = 'I';
-    // nodeList[22].letter = 'O';
-    // nodeList[23].letter = 'A';
-    // nodeList[24].letter = 'T';
-    // nodeList[25].letter = 'E';
+    nodeList[5].letter = 'V';
+    nodeList[6].letter = 'B';
+    nodeList[7].letter = 'P';
+    nodeList[8].letter = 'Y';
+    nodeList[9].letter = 'G';
+    nodeList[10].letter = 'F';
+    nodeList[11].letter = 'W';
+    nodeList[12].letter = 'M';
+    nodeList[13].letter = 'U';
+    nodeList[14].letter = 'C';
+    nodeList[15].letter = 'L';
+    nodeList[16].letter = 'D';
+    nodeList[17].letter = 'R';
+    nodeList[18].letter = 'H';
+    nodeList[19].letter = 'S';
+    nodeList[20].letter = 'N';
+    nodeList[21].letter = 'I';
+    nodeList[22].letter = 'O';
+    nodeList[23].letter = 'A';
+    nodeList[24].letter = 'T';
+    nodeList[25].letter = 'E';
 
     Node *root = huffmanEncode(nodeList);
-    bt.printTree2D(root, 3);
+    bt.printEncodeTable(root, "");
 
     return 0;
 }
