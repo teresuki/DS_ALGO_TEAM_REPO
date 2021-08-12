@@ -19,6 +19,14 @@ int recursive_knapsack(int W, int i ,int w[], int v[])
 		return max(recursive_knapsack(W,i-1,w,v), (v[i-1] +recursive_knapsack(W-w[i-1] ,i-1,w,v) ) );
 }
 
+void list_knapsack(int W, int i, int w[], int v[])
+{
+	if( i==0 ) //if we use none first coin or our knapsack cant hold anything then the value must be 0
+		return (W < w[0] ? 0:v[0]);
+	
+	
+}
+
 int dynamic_knapsack(int W, int i, int w[], int v[])
 {
 	int K[i][W+1];
@@ -38,19 +46,6 @@ int dynamic_knapsack(int W, int i, int w[], int v[])
 		}
 	}
 	return K[i-1][W];
-}
-
-int finding_knapsack(int W, int i, int w[], int v[])
-{
-	int Ka[i][W+1];
-	for (int row = 0;row  < i; row ++)
-	{
-		for(int col =0;  col < W+1; col++)
-		{
-			Ka[row][col] = -1;
-		}
-	}
-	return Ka[i-1][W];
 }
 
 

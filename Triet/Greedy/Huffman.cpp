@@ -60,8 +60,10 @@ class Document
 		cout<<endl;
 		for (int i = COUNT; i < space; i++)
 			cout<<" ";
-		cout<<root->character<<":"<<root->frequency<<"\n";
-	
+
+		if(root->character == '\0') cout<<"\\0";
+		else cout<<root->character;
+		cout<<":"<<root->frequency<<"\n";
 		// Process left child
 		print2DUtil(root->left, space);
 	}
@@ -109,6 +111,20 @@ class Document
 		// 	cout<<the_list[i].character<<'\t' << the_list[i].frequency <<'\n';
 		// }		
 
+		if(the_list.size() == 1)
+		{
+			Node *z = new Node();
+
+			Node last = the_list.back();
+			Node *x = new Node(last.character,last.frequency,last.left,last.right);
+			the_list.pop_back();
+
+			z->left = nullptr;
+			z->right = x;
+
+			the_list.push_back(*z);
+		}
+
 		while(the_list.size() >1 )
 		{
 			Node *z = new Node();
@@ -130,12 +146,15 @@ class Document
 
 			sort(the_list.begin(),the_list.end(),compare_node_freqency);
 		}
+
+
 		this->root = &the_list[0];
 		print2D(this->root);
 	}
 
 	void tree_traversal(Node *current_node, string huff_code)
 	{
+
 		if(current_node->character != '\0')
 		{
 			this->char_huff.insert(pair<char,string>(current_node->character,huff_code));
@@ -152,8 +171,12 @@ class Document
 	void map_char_huff_code()
 	{
 		string huff_code;
-		if(this->root != nullptr) tree_traversal(this->root,huff_code);
-		else cout<<"No tree to encode huffman code yet"<<'\n';
+		if(this->root == nullptr) cout<<"NO HUFFMAN TREE EXISTED YET!!!"<<'\n';
+		else if(this->root->left == nullptr)
+		{
+			this->char_huff.insert(pair<char,string>(this->root->right->character,"1"));
+		}
+		else if(this->root != nullptr) {tree_traversal(this->root,huff_code);}
 
 		for(auto itr = this->char_huff.begin(); itr != this->char_huff.end(); itr++ )
 		{
@@ -184,8 +207,8 @@ class Document
 	{
 
 		string huff_text;
-		cout<<"this function only works if you encode the text and decode with the same Document object"<<'\n';
-		cout<<"Copy the output bit string above and paste it down below"<<'\n';
+		// cout<<"this function only works if you encode the text and decode with the same Document object"<<'\n';
+		// cout<<"Copy the output bit string above and paste it down below"<<'\n';
 		cout<<"Enter the bit string you want to decode:";
 		cin >> huff_text;
 		Node *current_node = this->root;
