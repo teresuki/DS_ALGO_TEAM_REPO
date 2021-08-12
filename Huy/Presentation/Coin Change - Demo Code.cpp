@@ -34,8 +34,8 @@ int coin(int N, vector<int>& optimal_solution)
     }
 
     // Construct the optimal solution from the table
-    int i = 3, j = N;
-    while(i != 0)     // start at entry t[n, N]
+    int i = 3, j = N;   // start at entry t[n, N]
+    while(i != 0)     
     {
        if(t[i][j] == t[i - 1][j])
             i--;
@@ -45,7 +45,8 @@ int coin(int N, vector<int>& optimal_solution)
             j = j - d[i];
         }
     }
-
+    optimal_solution[0] = t[0][j];
+   
     return t[3][N];
 }
 
@@ -66,7 +67,7 @@ void coin_change()
     cout << "one dollars: " << optimal_solution[3] << endl;
     cout << "quarters: " << optimal_solution[2] << endl;
     cout << "dimes: " << optimal_solution[1] << endl;
-    cout << "pennies " << result - optimal_solution[3] - optimal_solution[2] - optimal_solution[1] << endl;
+    cout << "pennies " << optimal_solution[0] << endl;
 }
 
 // Driver code
