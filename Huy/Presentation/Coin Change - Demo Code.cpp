@@ -37,13 +37,13 @@ int coin(int N, vector<int>& optimal_solution)
     int i = 3, j = N;
     while(i != 0)     // start at entry t[n, N]
     {
-        if(t[i][j] == t[i][j - d[i]] + 1)
+       if(t[i][j] == t[i - 1][j])
+            i--;
+       else if(t[i][j] == t[i][j - d[i]] + 1)
         {
             optimal_solution[i] += 1;
             j = j - d[i];
         }
-        if(t[i][j] == t[i - 1][j])
-            i--;
     }
 
     return t[3][N];
