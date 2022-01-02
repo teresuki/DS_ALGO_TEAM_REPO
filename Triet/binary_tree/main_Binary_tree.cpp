@@ -13,7 +13,7 @@ struct Node
 
 };
 
-/dtatatatatatta
+//dtatatatatatta
 class Btree
 {
 	private:
